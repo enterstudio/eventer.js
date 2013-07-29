@@ -4,4 +4,4 @@ Simple client site pubsub
 
 ### Credits
 
-Not sure where I found the original code in the repo.
+Not sure where I found the original code.
