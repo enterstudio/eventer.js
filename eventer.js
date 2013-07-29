@@ -1,4 +1,5 @@
 var Eventer = function() {
+    if( !(this instanceof Eventer) ) return new Eventer;
 
 	var cache = {};
 
