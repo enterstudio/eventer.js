@@ -6,7 +6,7 @@ var Eventer = function() {
     this.publish = function(topic, args){
         if(typeof cache[topic] === 'object') {    
             cache[topic].forEach(function(property){
-                property.apply($, args || []);
+                property.apply(this, args || []);
             });
         }
     };
