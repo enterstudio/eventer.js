@@ -3,20 +3,19 @@ var assert = require('assert'),
 
 describe( 'Eventer', function(){
     var eventer = new Eventer(),
-        mock;
+        a = function() { return 1; },
+        b = function() { return 2; },
+        c = function() { return 3; };
 
     it( 'should subscribe to an event', function(){
         assert.equal( eventer.queue()['subscribe'], undefined );
-        eventer.subscribe( 'subscribe', function(){ return 1 } );
+        eventer.subscribe( 'subscribe', a );
         assert.equal( eventer.queue()['subscribe'].length, 1 );
-        eventer.subscribe( 'subscribe', function(){ return 2 } );
+        eventer.subscribe( 'subscribe', b );
         assert.equal( eventer.queue()['subscribe'].length, 2 );
     });
 
     it( 'should unsubscribe to an event', function(){
-        var a = function() { return 1; },
-            b = function() { return 2; },
-            c = function() { return 3; }
         assert.equal( eventer.queue()['unsubscribe'], undefined );
         eventer.subscribe( 'unsubscribe', a );
         eventer.subscribe( 'unsubscribe', b );
