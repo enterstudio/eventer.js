@@ -7,7 +7,9 @@ var Eventer = function() {
     cache = {};
 
     this.publish = function(topic, args){
+
         if(typeof cache[topic] === 'object') {    
+
             cache[topic].forEach(function(property){
                 property.apply(this, args || []);
             });
@@ -15,10 +17,13 @@ var Eventer = function() {
     };
 
     this.subscribe = function(topic, callback){
+
         if(!cache[topic]){
             cache[topic] = [];
         }
+
         cache[topic].push(callback);
+
         return [topic, callback]; 
     };
 
@@ -27,6 +32,7 @@ var Eventer = function() {
         if( cache[topic] ) {
 
             cache[topic].forEach(function(element, idx){
+
                 if(element == fn){
                     cache[topic].splice(idx, 1);
                 }
