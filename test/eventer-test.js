@@ -26,4 +26,22 @@ describe( 'Eventer', function(){
         assert.equal( eventer.queue()['unsubscribe'][0], b );
         assert.equal( eventer.queue()['unsubscribe'][1], c );
     });
+
+    describe( 'publish', function(){
+
+        var a = function(data) {
+            assert.equal(1, data);
+        };
+
+        var b = function(data) {
+            assert.equal(1, data);
+        };
+
+        it('publishes data to functions', function(){
+            assert.equal( eventer.queue()['publish'], undefined );
+            eventer.subscribe( 'publish', a );
+            eventer.subscribe( 'publish', b );
+            eventer.publish( 'publish', [ 1 ] );
+        });
+    });
 })
