@@ -22,11 +22,10 @@ var Eventer = function() {
         return [topic, callback]; 
     };
 
-    this.unsubscribe = function(handle){
-        var t = handle[0];
-        cache[t] && $.each(cache[t], function(idx){
-            if(this == handle[1]){
-                cache[t].splice(idx, 1);
+    this.unsubscribe = function(topic, fn){
+        cache[topic] && cache[topic].forEach(function(element, idx){
+            if(element == fn){
+                cache[topic].splice(idx, 1);
             }
         });
     };
