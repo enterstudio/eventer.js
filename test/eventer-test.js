@@ -65,4 +65,26 @@ describe( 'Eventer', function(){
             eventer.publish( 'added', [] );
         });
     });
+    describe('aliases', function(){
+
+        it('maps on to subscribe', function(){
+            assert.equal(eventer.on, eventer.subscribe);
+        });
+
+        it('maps trigger to publish', function(){
+            assert.equal(eventer.trigger, eventer.publish);
+        });
+
+        it('maps off to subscribe', function(){
+            assert.equal(eventer.off, eventer.unsubscribe);
+        });
+
+        it('truly acts as an alias', function(){
+            // I wasn't sure how this worked in JS
+            assert.equal( eventer.queue()['alias'], undefined );
+            eventer.on('alias', a);
+            assert.equal( eventer.queue()['alias'].length, 1 );
+        });
+
+    })
 })

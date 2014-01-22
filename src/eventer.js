@@ -34,6 +34,11 @@ var Eventer = function() {
         return cache;
     }
 
+    // alias
+    this.on      = this.subscribe;
+    this.off     = this.unsubscribe;
+    this.trigger = this.publish;
+
   return this;
 };
 module.exports.Eventer = Eventer;
