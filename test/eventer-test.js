@@ -7,6 +7,11 @@ describe( 'Eventer', function(){
         b = function() { return 2; },
         c = function() { return 3; };
 
+    it( 'forces instantiation', function(){
+        var e = Eventer();
+        assert.equal( true, e instanceof(Eventer) );
+    });
+
     it( 'should subscribe to an event', function(){
         assert.equal( eventer.queue().subscribe, undefined );
         eventer.subscribe( 'subscribe', a );
