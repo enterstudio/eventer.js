@@ -23,16 +23,20 @@ var Eventer = function() {
     };
 
     this.unsubscribe = function(topic, fn){
-        cache[topic] && cache[topic].forEach(function(element, idx){
-            if(element == fn){
-                cache[topic].splice(idx, 1);
-            }
-        });
+
+        if( cache[topic] ) {
+
+            cache[topic].forEach(function(element, idx){
+                if(element == fn){
+                    cache[topic].splice(idx, 1);
+                }
+            });
+        }
     };
 
     this.queue = function() {
         return cache;
-    }
+    };
 
     // alias
     this.on      = this.subscribe;

@@ -8,22 +8,22 @@ describe( 'Eventer', function(){
         c = function() { return 3; };
 
     it( 'should subscribe to an event', function(){
-        assert.equal( eventer.queue()['subscribe'], undefined );
+        assert.equal( eventer.queue().subscribe, undefined );
         eventer.subscribe( 'subscribe', a );
-        assert.equal( eventer.queue()['subscribe'].length, 1 );
+        assert.equal( eventer.queue().subscribe.length, 1 );
         eventer.subscribe( 'subscribe', b );
-        assert.equal( eventer.queue()['subscribe'].length, 2 );
+        assert.equal( eventer.queue().subscribe.length, 2 );
     });
 
     it( 'should unsubscribe to an event', function(){
-        assert.equal( eventer.queue()['unsubscribe'], undefined );
+        assert.equal( eventer.queue().unsubscribe, undefined );
         eventer.subscribe( 'unsubscribe', a );
         eventer.subscribe( 'unsubscribe', b );
         eventer.subscribe( 'unsubscribe', c );
         eventer.unsubscribe( 'unsubscribe', a );
-        assert.equal( eventer.queue()['unsubscribe'].length, 2 );
-        assert.equal( eventer.queue()['unsubscribe'][0], b );
-        assert.equal( eventer.queue()['unsubscribe'][1], c );
+        assert.equal( eventer.queue().unsubscribe.length, 2 );
+        assert.equal( eventer.queue().unsubscribe[0], b );
+        assert.equal( eventer.queue().unsubscribe[1], c );
     });
 
     describe( 'publish', function(){
@@ -37,7 +37,7 @@ describe( 'Eventer', function(){
         };
 
         it('publishes data to functions', function(){
-            assert.equal( eventer.queue()['publish'], undefined );
+            assert.equal( eventer.queue().publish, undefined );
             eventer.subscribe( 'publish', a );
             eventer.subscribe( 'publish', b );
             eventer.publish( 'publish', [ 1 ] );
@@ -58,13 +58,14 @@ describe( 'Eventer', function(){
             };
 
         it('call functions in the order they were added', function(){
-            assert.equal( eventer.queue()['added'], undefined );
+            assert.equal( eventer.queue().added, undefined );
             eventer.subscribe( 'added', added_1 );
             eventer.subscribe( 'added', added_2 );
             eventer.subscribe( 'added', added_3 );
             eventer.publish( 'added', [] );
         });
     });
+
     describe('aliases', function(){
 
         it('maps on to subscribe', function(){
@@ -81,10 +82,10 @@ describe( 'Eventer', function(){
 
         it('truly acts as an alias', function(){
             // I wasn't sure how this worked in JS
-            assert.equal( eventer.queue()['alias'], undefined );
+            assert.equal( eventer.queue().alias, undefined );
             eventer.on('alias', a);
-            assert.equal( eventer.queue()['alias'].length, 1 );
+            assert.equal( eventer.queue().alias.length, 1 );
         });
 
-    })
-})
+    });
+});
