@@ -1,0 +1,34 @@
+{
+  "name": "eventer.js",
+  "version": "0.0.1",
+  "description": "Simple JavaScript pub sub",
+  "main": "src/eventer.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/luk3thomas/eventer.js.git"
+  },
+  "keywords": [
+    "PubSub"
+  ],
+  "author": "Luke Thomas <luk3thomas@gmail.com> (http://luk3thomas.com/)",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/luk3thomas/eventer.js/issues"
+  },
+  "devDependencies": {
+    "mocha": "~1.17.0",
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.6.3",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-copy": "~0.5.0",
+    "grunt-mocha-test": "~0.8.2",
+    "grunt-shell": "~0.6.3"
+  }
+}
