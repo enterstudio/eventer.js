@@ -43,5 +43,27 @@ describe( 'Eventer', function(){
             eventer.subscribe( 'publish', b );
             eventer.publish( 'publish', [ 1 ] );
         });
+
+        var added_data = 0 ,
+            added_1 = function() {
+                added_data += 1;
+                assert.equal( 1, added_data );
+            },
+            added_2 = function() {
+                added_data += 2;
+                assert.equal( 3, added_data );
+            },
+            added_3 = function() {
+                added_data += 3;
+                assert.equal( 6, added_data );
+            };
+
+        it('call functions in the order they were added', function(){
+            assert.equal( eventer.queue()['added'], undefined );
+            eventer.subscribe( 'added', added_1 );
+            eventer.subscribe( 'added', added_2 );
+            eventer.subscribe( 'added', added_3 );
+            eventer.publish( 'added', [] );
+        });
     });
 })
