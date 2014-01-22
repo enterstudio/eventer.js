@@ -4,7 +4,7 @@ var Eventer = function() {
         return new Eventer();
     }
 
-    var cache = {};
+    cache = {};
 
     this.publish = function(topic, args){
         if(typeof cache[topic] === 'object') {    
@@ -30,6 +30,10 @@ var Eventer = function() {
             }
         });
     };
+
+    this.queue = function() {
+        return cache;
+    }
 
   return this;
 };
