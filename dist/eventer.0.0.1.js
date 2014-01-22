@@ -1,5 +1,8 @@
 var Eventer = function() {
-    if( !(this instanceof Eventer) ) return new Eventer;
+
+    if( !(this instanceof Eventer) ) {
+        return new Eventer();
+    }
 
     var cache = {};
 
@@ -30,3 +33,4 @@ var Eventer = function() {
 
   return this;
 };
+
