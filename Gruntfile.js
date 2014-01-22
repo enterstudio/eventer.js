@@ -3,23 +3,19 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-shell');
+    grunt.loadNpmTasks('grunt-line-remover');
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
-            dist: {
+            versioned: {
                 src: 'src/eventer.js',
                 dest: 'dist/eventer.<%= pkg.version %>.min.js'
-            }
-        },
-        copy: {
-            js: {
-                files: [
-                    { src: '**', dest: 'dist/', expand: true, cwd: 'src/' }
-                ]
+            },
+            plain: {
+                src: 'src/eventer.js',
+                dest: 'dist/eventer.min.js'
             }
         },
         jshint: {
@@ -31,6 +27,17 @@ module.exports = function(grunt) {
             },
             gruntfile: {
                 src: 'Gruntfile.js'
+            }
+        },
+        lineremover: {
+            node: {
+                files: [
+                    { 'dist/eventer.<%= pkg.version %>.js': 'src/eventer.js' },
+                    { 'dist/eventer.js': 'src/eventer.js' }
+                ],
+                options: {
+                    exclusionPattern: /module/g
+                }
             }
         },
         lineremover: {
@@ -60,7 +67,8 @@ module.exports = function(grunt) {
                     'mocha'
                 ].join('&&'),
                 options: {
-                    stdout: true
+                    stdout: true,
+                    stderr: true
                 }
             }
         }
@@ -69,5 +77,6 @@ module.exports = function(grunt) {
     grunt.registerTask('default', [ 'watch' ]);
     grunt.registerTask('build', [ 'copy', 'uglify' ]);
     grunt.registerTask('test', [ 'shell:test' ]);
+    grunt.registerTask('copy', [ 'lineremover' ]);
 
 };
