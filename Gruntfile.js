@@ -20,24 +20,7 @@ module.exports = function(grunt) {
         },
         jshint: {
             main: {
-                src: 'src/**'
-            },
-            test: {
-                src: 'test/*'
-            },
-            gruntfile: {
-                src: 'Gruntfile.js'
-            }
-        },
-        lineremover: {
-            node: {
-                files: [
-                    { 'dist/eventer.<%= pkg.version %>.js': 'src/eventer.js' },
-                    { 'dist/eventer.js': 'src/eventer.js' }
-                ],
-                options: {
-                    exclusionPattern: /module/g
-                }
+                src: [ 'Gruntfile.js', 'src/**', 'test/**' ]
             }
         },
         lineremover: {
@@ -52,19 +35,15 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            test: {
-                files: [ 'src/**', 'test/**' ],
-                tasks: [ 'test' ]
-            },
             js: {
-                files: [ 'src/**' ],
-                tasks: [ 'jshint' ]
+                files: [ 'Gruntfile.js', 'src/**', 'test/**' ],
+                tasks: [ 'jshint', 'test' ]
             }
         },
         shell: {
             test: {
                 command: [
-                    'mocha'
+                    'mocha -R spec'
                 ].join('&&'),
                 options: {
                     stdout: true,
