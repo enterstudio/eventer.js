@@ -11,11 +11,11 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
             versioned: {
-                src: 'src/eventer.js',
+                src: 'dist/eventer.js',
                 dest: 'dist/eventer.<%= pkg.version %>.min.js'
             },
             plain: {
-                src: 'src/eventer.js',
+                src: 'dist/eventer.js',
                 dest: 'dist/eventer.min.js'
             }
         },
