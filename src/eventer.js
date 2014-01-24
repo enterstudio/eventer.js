@@ -19,12 +19,16 @@ var Eventer = function() {
     };
 
     this.subscribe = function(topic, callback){
+        var callbacks = [].concat(callback);
 
-        if(!cache[topic]){
-            cache[topic] = [];
-        }
+        callbacks.forEach(function(callback){
 
-        cache[topic].push(callback);
+            if(!cache[topic]){
+                cache[topic] = [];
+            }
+
+            cache[topic].push(callback);
+        });
 
         return [topic, callback]; 
     };

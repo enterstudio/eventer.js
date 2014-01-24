@@ -12,12 +12,21 @@ describe( 'Eventer', function(){
         assert.equal( true, e instanceof(Eventer) );
     });
 
-    it( 'should subscribe to an event', function(){
-        assert.equal( eventer.queue().subscribe, undefined );
-        eventer.subscribe( 'subscribe', a );
-        assert.equal( eventer.queue().subscribe.length, 1 );
-        eventer.subscribe( 'subscribe', b );
-        assert.equal( eventer.queue().subscribe.length, 2 );
+    describe('subscribe', function(){
+
+        it( 'should subscribe to an event', function(){
+            assert.equal( eventer.queue().subscribe, undefined );
+            eventer.subscribe( 'subscribe', a );
+            assert.equal( eventer.queue().subscribe.length, 1 );
+            eventer.subscribe( 'subscribe', b );
+            assert.equal( eventer.queue().subscribe.length, 2 );
+        });
+
+        it( 'can subscribe multiple functions to a single topic', function(){
+            eventer.queue().subscribe = undefined ;
+            eventer.subscribe( 'subscribe', [a, b] );
+            assert.equal( eventer.queue().subscribe.length, 2 );
+        });
     });
 
     it( 'should unsubscribe to an event', function(){
