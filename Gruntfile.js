@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                     { 'dist/eventer.js': 'src/eventer.js' }
                 ],
                 options: {
-                    exclusionPattern: /module/g
+                    exclusionPattern: /module|^$/g
                 }
             }
         },
