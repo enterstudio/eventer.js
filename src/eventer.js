@@ -4,16 +4,18 @@ var Eventer = function() {
         return new Eventer();
     }
 
-    cache = {};
-
     this.publish = function(topic, args){
+        topics = _to_a(topic);
 
-        if(typeof cache[topic] === 'object') {    
+        topics.forEach(function(topic){
 
-            cache[topic].forEach(function(property){
-                property.apply(this, args || []);
-            });
-        }
+            if(typeof cache[topic] === 'object') {    
+
+                cache[topic].forEach(function(property){
+                    property.apply(this, args || []);
+                });
+            }
+        });
     };
 
     this.subscribe = function(topic, callback){
@@ -48,6 +50,17 @@ var Eventer = function() {
     this.on      = this.subscribe;
     this.off     = this.unsubscribe;
     this.trigger = this.publish;
+
+    // private
+
+    cache = {};
+
+    var _to_a = function(o) {
+        if( typeof o === 'string' ) {
+            return o.split(' ');
+        }
+        return o;
+    };
 
   return this;
 };

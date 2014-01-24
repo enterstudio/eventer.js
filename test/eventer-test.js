@@ -69,6 +69,18 @@ describe( 'Eventer', function(){
             eventer.subscribe( 'added', added_3 );
             eventer.publish( 'added', [] );
         });
+
+        it('can publish data to multiple topics', function(){
+            var state = 0,
+                multi = function(d) {
+                    state += d;
+                };
+            assert.equal( eventer.queue().multiple, undefined );
+            eventer.subscribe( 'multi:1', multi );
+            eventer.subscribe( 'multi:2', multi );
+            eventer.publish( ['multi:1', 'multi:2'], [1] );
+            assert.equal( 2, state );
+        });
     });
 
     describe('aliases', function(){
