@@ -12,12 +12,21 @@ describe( 'Eventer', function(){
         assert.equal( true, e instanceof(Eventer) );
     });
 
-    it( 'should subscribe to an event', function(){
-        assert.equal( eventer.queue().subscribe, undefined );
-        eventer.subscribe( 'subscribe', a );
-        assert.equal( eventer.queue().subscribe.length, 1 );
-        eventer.subscribe( 'subscribe', b );
-        assert.equal( eventer.queue().subscribe.length, 2 );
+    describe('subscribe', function(){
+
+        it( 'should subscribe to an event', function(){
+            assert.equal( eventer.queue().subscribe, undefined );
+            eventer.subscribe( 'subscribe', a );
+            assert.equal( eventer.queue().subscribe.length, 1 );
+            eventer.subscribe( 'subscribe', b );
+            assert.equal( eventer.queue().subscribe.length, 2 );
+        });
+
+        it( 'can subscribe multiple functions to a single topic', function(){
+            eventer.queue().subscribe = undefined ;
+            eventer.subscribe( 'subscribe', [a, b] );
+            assert.equal( eventer.queue().subscribe.length, 2 );
+        });
     });
 
     it( 'should unsubscribe to an event', function(){
@@ -68,6 +77,18 @@ describe( 'Eventer', function(){
             eventer.subscribe( 'added', added_2 );
             eventer.subscribe( 'added', added_3 );
             eventer.publish( 'added', [] );
+        });
+
+        it('can publish data to multiple topics', function(){
+            var state = 0,
+                multi = function(d) {
+                    state += d;
+                };
+            assert.equal( eventer.queue().multiple, undefined );
+            eventer.subscribe( 'multi:1', multi );
+            eventer.subscribe( 'multi:2', multi );
+            eventer.publish( ['multi:1', 'multi:2'], [1] );
+            assert.equal( 2, state );
         });
     });
 
