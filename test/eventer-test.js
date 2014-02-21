@@ -12,6 +12,13 @@ describe( 'Eventer', function(){
         assert.equal( true, e instanceof(Eventer) );
     });
 
+    it( 'creates isolated instances', function(){
+        var e = new Eventer(),
+            f = new Eventer();
+        e.subscribe('a', function(){});
+        assert.notEqual( f.queue(), e.queue() );
+    });
+
     describe('subscribe', function(){
 
         it( 'should subscribe to an event', function(){
