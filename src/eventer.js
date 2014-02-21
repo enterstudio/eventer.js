@@ -57,7 +57,7 @@ var Eventer = function() {
 
     // private
 
-    cache = {};
+    var cache = {};
 
     var _to_a = function(o) {
         if( typeof o === 'string' ) {
