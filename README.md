@@ -37,7 +37,7 @@ e.unsubscribe( ['hear:bark', 'hear:car'] , [this.stop, this.listen] );
 
 ## Example
 
-Here is a fun example of eventer on a `Dog` object. Eventer allows you to stich the functionality of your object. Paste the following code into a REPL. Don't forget to include Eventer :)
+Here is a fun example of eventer on a `Dog` object. Paste the following code into a REPL. Don't forget to include Eventer :)
 
 
 ```javascript
