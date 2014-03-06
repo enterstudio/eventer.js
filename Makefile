@@ -4,7 +4,7 @@ watch:
 	@grunt
 
 test:
-	@grunt test
+	@mocha -R spec
 
 push:
 	git push origin master develop
