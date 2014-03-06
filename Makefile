@@ -1,7 +1,10 @@
 .PHONY: test
 
-test:
+watch:
 	@grunt
+
+test:
+	@grunt test
 
 push:
 	git push origin master develop
