@@ -52,8 +52,6 @@ var Dog = function() {
     this.init = function() {
 
         // One function subscribed to an event
-        this.e.subscribe( 'see:car', this.chase );
-        this.e.subscribe( 'see:cat', this.chase );
         this.e.subscribe( 'sleep', this.find_cozy_place );
 
         // multiple functions subscribed to one event
@@ -62,6 +60,7 @@ var Dog = function() {
         
         // One function subscribed to multiple events
         this.e.subscribe( ['see:stranger', 'see:mailman'], this.bark );
+        this.e.subscribe( ['see:car', 'see:cat'], this.chase );
         
         // Multiple functions subscribed to multiple events
         this.e.subscribe( ['eat', 'sleep'], [this.relax, this.lay] );
