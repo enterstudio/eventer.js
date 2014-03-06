@@ -4,68 +4,88 @@ var Eventer = function() {
         return new Eventer();
     }
 
-    this.publish = function(topic, args){
-        topics = _to_a(topic);
+    this.cache = {};
+};
 
-        topics.forEach(function(topic){
+Eventer.prototype.helpers = {
 
-            if(typeof cache[topic] === 'object') {    
-
-                cache[topic].forEach(function(property){
-                    property.apply(this, args || []);
-                });
-            }
-        });
-    };
-
-    this.subscribe = function(topic, callback){
-        var callbacks = [].concat(callback);
-
-        callbacks.forEach(function(callback){
-
-            if(!cache[topic]){
-                cache[topic] = [];
-            }
-
-            cache[topic].push(callback);
-        });
-
-        return [topic, callback]; 
-    };
-
-    this.unsubscribe = function(topic, fn){
-
-        if( cache[topic] ) {
-
-            cache[topic].forEach(function(element, idx){
-
-                if(element == fn){
-                    cache[topic].splice(idx, 1);
-                }
-            });
-        }
-    };
-
-    this.queue = function() {
-        return cache;
-    };
-
-    // alias
-    this.on      = this.subscribe;
-    this.off     = this.unsubscribe;
-    this.trigger = this.publish;
-
-    // private
-
-    var cache = {};
-
-    var _to_a = function(o) {
+    to_a: function(o) {
         if( typeof o === 'string' ) {
             return o.split(' ');
         }
-        return o;
-    };
-
-  return this;
+        return [].concat(o);
+    }
 };
+
+Eventer.prototype.publish = function(topic, args){
+    var self = this;
+
+    topics = this.helpers.to_a(topic);
+
+    topics.forEach(function(topic){
+
+        if(typeof self.cache[topic] === 'object') {    
+
+            self.cache[topic].forEach(function(property){
+                property.apply(this, args || []);
+            });
+        }
+    });
+};
+
+Eventer.prototype.subscribe = function(topic, callback){
+
+    var callbacks = [].concat(callback),
+        topics = this.helpers.to_a(topic),
+        self = this;
+
+    callbacks.forEach(function(callback){
+
+        topics.forEach(function(topic){
+
+            if(!self.cache[topic]){
+                self.cache[topic] = [];
+            }
+
+            self.cache[topic].push(callback);
+        });
+    });
+
+    return [topic, callback]; 
+};
+
+Eventer.prototype.unsubscribe = function(topic, fn){
+
+    var self = this,
+        topics = this.helpers.to_a(topic),
+        callbacks = this.helpers.to_a(fn);
+
+    topics.forEach(function(topic){
+
+        if( self.cache[topic] ) {
+
+            callbacks.forEach(function(callback){
+
+                self.cache[topic].forEach(function(element, idx){
+
+                    if(typeof callback === 'undefined'){
+                        return delete self.cache[topic];
+                    }
+
+                    if(element === callback){
+                        self.cache[topic].splice(idx, 1);
+                    }
+                });
+            });
+        }
+    });
+};
+
+// Alias methods
+
+Eventer.prototype.on      = Eventer.prototype.subscribe;
+Eventer.prototype.off     = Eventer.prototype.unsubscribe;
+Eventer.prototype.trigger = Eventer.prototype.publish;
+
+
 module.exports.Eventer = Eventer;

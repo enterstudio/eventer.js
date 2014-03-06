@@ -16,35 +16,82 @@ describe( 'Eventer', function(){
         var e = new Eventer(),
             f = new Eventer();
         e.subscribe('a', function(){});
-        assert.notEqual( f.queue(), e.queue() );
+        assert.notEqual( f.cache, e.cache );
     });
 
     describe('subscribe', function(){
 
         it( 'should subscribe to an event', function(){
-            assert.equal( eventer.queue().subscribe, undefined );
+            assert.equal( eventer.cache.subscribe, undefined );
             eventer.subscribe( 'subscribe', a );
-            assert.equal( eventer.queue().subscribe.length, 1 );
+            assert.equal( eventer.cache.subscribe.length, 1 );
             eventer.subscribe( 'subscribe', b );
-            assert.equal( eventer.queue().subscribe.length, 2 );
+            assert.equal( eventer.cache.subscribe.length, 2 );
         });
 
         it( 'can subscribe multiple functions to a single topic', function(){
-            eventer.queue().subscribe = undefined ;
+            eventer.cache.subscribe = undefined ;
             eventer.subscribe( 'subscribe', [a, b] );
-            assert.equal( eventer.queue().subscribe.length, 2 );
+            assert.equal( eventer.cache.subscribe.length, 2 );
+        });
+
+        it( 'can subscribe multiple functions to multiple topics', function(){
+            assert.equal( eventer.cache.manysubscribe1, undefined );
+            assert.equal( eventer.cache.manysubscribe2, undefined );
+            eventer.subscribe( ['manysubscribe1', 'manysubscribe2'], [a, b] );
+            assert.equal( eventer.cache.manysubscribe1.length, 2 );
+            assert.equal( eventer.cache.manysubscribe2.length, 2 );
+            assert.equal( eventer.cache.manysubscribe1[0], a );
+            assert.equal( eventer.cache.manysubscribe1[1], b );
+            assert.equal( eventer.cache.manysubscribe2[0], a );
+            assert.equal( eventer.cache.manysubscribe2[1], b );
         });
     });
 
-    it( 'should unsubscribe to an event', function(){
-        assert.equal( eventer.queue().unsubscribe, undefined );
-        eventer.subscribe( 'unsubscribe', a );
-        eventer.subscribe( 'unsubscribe', b );
-        eventer.subscribe( 'unsubscribe', c );
-        eventer.unsubscribe( 'unsubscribe', a );
-        assert.equal( eventer.queue().unsubscribe.length, 2 );
-        assert.equal( eventer.queue().unsubscribe[0], b );
-        assert.equal( eventer.queue().unsubscribe[1], c );
+    describe('unsubscribe', function(){
+
+        it( 'should unsubscribe to an event', function(){
+            assert.equal( eventer.cache.unsubscribe, undefined );
+            eventer.subscribe( 'unsubscribe', a );
+            eventer.subscribe( 'unsubscribe', b );
+            eventer.subscribe( 'unsubscribe', c );
+            eventer.unsubscribe( 'unsubscribe', a );
+            assert.equal( eventer.cache.unsubscribe.length, 2 );
+            assert.equal( eventer.cache.unsubscribe[0], b );
+            assert.equal( eventer.cache.unsubscribe[1], c );
+        });
+
+        it( 'can unsubscribe a function from multiple events', function(){
+            assert.equal( eventer.cache.munsubscribe1, undefined );
+            assert.equal( eventer.cache.munsubscribe2, undefined );
+            eventer.subscribe( ['munsubscribe1', 'munsubscribe2'], [a, b] );
+            assert.equal( eventer.cache.munsubscribe1.length, 2 );
+            assert.equal( eventer.cache.munsubscribe2.length, 2 );
+            eventer.unsubscribe( 'munsubscribe1', [a, b] );
+            assert.equal( eventer.cache.munsubscribe1.length, 0 );
+            eventer.unsubscribe( 'munsubscribe2', [a, b] );
+            assert.equal( eventer.cache.munsubscribe2.length, 0 );
+        });
+
+        it( 'can unsubscribe multiple functions from multiple events', function(){
+            assert.equal( eventer.cache.mmunsubscribe1, undefined );
+            assert.equal( eventer.cache.mmunsubscribe2, undefined );
+            eventer.subscribe( ['mmunsubscribe1', 'mmunsubscribe2'], [a, b] );
+            assert.equal( eventer.cache.mmunsubscribe1.length, 2 );
+            assert.equal( eventer.cache.mmunsubscribe2.length, 2 );
+            eventer.unsubscribe( ['mmunsubscribe1', 'mmunsubscribe2'], [a, b] );
+            assert.equal( eventer.cache.mmunsubscribe1.length, 0 );
+            assert.equal( eventer.cache.mmunsubscribe2.length, 0 );
+        });
+
+        it( 'can unsubscribe all functions from all events', function(){
+            assert.equal( eventer.cache.aunsubscribe1, undefined );
+            assert.equal( eventer.cache.aunsubscribe2, undefined );
+            eventer.subscribe( ['aunsubscribe1', 'aunsubscribe2'], [a, b] );
+            eventer.unsubscribe( ['aunsubscribe1', 'aunsubscribe2']);
+            assert.equal( eventer.cache.aunsubscribe1, undefined );
+            assert.equal( eventer.cache.aunsubscribe2, undefined );
+        });
     });
 
     describe( 'publish', function(){
@@ -58,7 +105,7 @@ describe( 'Eventer', function(){
         };
 
         it('publishes data to functions', function(){
-            assert.equal( eventer.queue().publish, undefined );
+            assert.equal( eventer.cache.publish, undefined );
             eventer.subscribe( 'publish', a );
             eventer.subscribe( 'publish', b );
             eventer.publish( 'publish', [ 1 ] );
@@ -79,7 +126,7 @@ describe( 'Eventer', function(){
             };
 
         it('call functions in the order they were added', function(){
-            assert.equal( eventer.queue().added, undefined );
+            assert.equal( eventer.cache.added, undefined );
             eventer.subscribe( 'added', added_1 );
             eventer.subscribe( 'added', added_2 );
             eventer.subscribe( 'added', added_3 );
@@ -91,7 +138,7 @@ describe( 'Eventer', function(){
                 multi = function(d) {
                     state += d;
                 };
-            assert.equal( eventer.queue().multiple, undefined );
+            assert.equal( eventer.cache.multiple, undefined );
             eventer.subscribe( 'multi:1', multi );
             eventer.subscribe( 'multi:2', multi );
             eventer.publish( ['multi:1', 'multi:2'], [1] );
@@ -115,9 +162,9 @@ describe( 'Eventer', function(){
 
         it('truly acts as an alias', function(){
             // I wasn't sure how this worked in JS
-            assert.equal( eventer.queue().alias, undefined );
+            assert.equal( eventer.cache.alias, undefined );
             eventer.on('alias', a);
-            assert.equal( eventer.queue().alias.length, 1 );
+            assert.equal( eventer.cache.alias.length, 1 );
         });
 
     });
