@@ -7,78 +7,81 @@ var Eventer = function() {
     this.cache = {};
 };
 
-Eventer.prototype.helpers = {
+Eventer.prototype = {
 
-    to_a: function(o) {
-        if( typeof o === 'string' ) {
-            return o.split(' ');
+    helpers: {
+
+        to_a: function(o) {
+            if( typeof o === 'string' ) {
+                return o.split(' ');
+            }
+            return [].concat(o);
         }
-        return [].concat(o);
-    }
-};
+    },
 
-Eventer.prototype.publish = function(topic, args){
-    var self = this;
+    publish: function(topic, args){
+        var self = this;
 
-    topics = this.helpers.to_a(topic);
-
-    topics.forEach(function(topic){
-
-        if(typeof self.cache[topic] === 'object') {    
-
-            self.cache[topic].forEach(function(property){
-                property.apply(this, args || []);
-            });
-        }
-    });
-};
-
-Eventer.prototype.subscribe = function(topic, callback){
-
-    var callbacks = [].concat(callback),
-        topics = this.helpers.to_a(topic),
-        self = this;
-
-    callbacks.forEach(function(callback){
+        topics = this.helpers.to_a(topic);
 
         topics.forEach(function(topic){
 
-            if(!self.cache[topic]){
-                self.cache[topic] = [];
-            }
+            if(typeof self.cache[topic] === 'object') {    
 
-            self.cache[topic].push(callback);
-        });
-    });
-
-    return [topic, callback]; 
-};
-
-Eventer.prototype.unsubscribe = function(topic, fn){
-
-    var self = this,
-        topics = this.helpers.to_a(topic),
-        callbacks = this.helpers.to_a(fn);
-
-    topics.forEach(function(topic){
-
-        if( self.cache[topic] ) {
-
-            callbacks.forEach(function(callback){
-
-                self.cache[topic].forEach(function(element, idx){
-
-                    if(typeof callback === 'undefined'){
-                        return delete self.cache[topic];
-                    }
-
-                    if(element === callback){
-                        self.cache[topic].splice(idx, 1);
-                    }
+                self.cache[topic].forEach(function(property){
+                    property.apply(this, args || []);
                 });
+            }
+        });
+    },
+
+    subscribe: function(topic, callback){
+
+        var callbacks = [].concat(callback),
+            topics = this.helpers.to_a(topic),
+            self = this;
+
+        callbacks.forEach(function(callback){
+
+            topics.forEach(function(topic){
+
+                if(!self.cache[topic]){
+                    self.cache[topic] = [];
+                }
+
+                self.cache[topic].push(callback);
             });
-        }
-    });
+        });
+
+        return [topic, callback]; 
+    },
+
+    unsubscribe: function(topic, fn){
+
+        var self = this,
+            topics = this.helpers.to_a(topic),
+            callbacks = this.helpers.to_a(fn);
+
+        topics.forEach(function(topic){
+
+            if( self.cache[topic] ) {
+
+                callbacks.forEach(function(callback){
+
+                    self.cache[topic].forEach(function(element, idx){
+
+                        if(typeof callback === 'undefined'){
+                            return delete self.cache[topic];
+                        }
+
+                        if(element === callback){
+                            self.cache[topic].splice(idx, 1);
+                        }
+                    });
+                });
+            }
+        });
+    }
 };
 
 // Alias methods
