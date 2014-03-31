@@ -186,6 +186,5 @@ describe( 'Eventer', function(){
             eventer.on('alias', a);
             assert.equal( eventer.cache.alias.length, 1 );
         });
-
     });
 });
