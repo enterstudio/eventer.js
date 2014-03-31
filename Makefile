@@ -1,7 +1,13 @@
 .PHONY: test
 
-test:
+watch:
 	@grunt
+
+test:
+	@mocha -R spec
+
+build:
+	grunt build
 
 push:
 	git push origin master develop
