@@ -6,6 +6,9 @@ watch:
 test:
 	@mocha -R spec
 
+build:
+	grunt build
+
 push:
 	git push origin master develop
 	git push --tags
