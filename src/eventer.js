@@ -29,7 +29,17 @@ Eventer.prototype = {
             if(typeof self.cache[topic] === 'object') {    
 
                 self.cache[topic].forEach(function(property){
-                    property.apply(this, args || []);
+                    // is not an array
+                    if( typeof property !== 'object') {
+                        property = [property, this];
+                    }
+
+                    // is an object
+                    if(! property.length ) {
+                        property = [property.callback, property.context];
+                    }
+
+                    property[0].apply(property[1], args || []);
                 });
             }
         });

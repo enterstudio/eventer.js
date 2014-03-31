@@ -144,6 +144,26 @@ describe( 'Eventer', function(){
             eventer.publish( ['multi:1', 'multi:2'], [1] );
             assert.equal( 2, state );
         });
+
+        var Context = function() { 
+        };
+
+        it('can bind a context with the callback, array', function(){
+            eventer.subscribe( 'subscribeContext', [[function(){
+                assert.equal(true, this instanceof Context);
+            }, new Context()]]);
+            eventer.publish( 'subscribeContext' );
+        });
+
+        it('can bind a context with the callback, object', function(){
+            eventer.subscribe( 'subscribeContextObject', [
+            {
+                callback: function(){ assert.equal(true, this instanceof Context); },
+                context: new Context()
+            }
+            ]);
+            eventer.publish( 'subscribeContextObject' );
+        });
     });
 
     describe('aliases', function(){
