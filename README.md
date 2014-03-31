@@ -34,6 +34,22 @@ e.publish( ['hear:car', 'hear:bark'], [{some: data}] );
 e.unsubscribe( ['hear:bark', 'hear:car'] , [this.stop, this.listen] );
 ```
 
+### Binding to context
+
+Set the context of your callback function withing the subscribe using one of the following methods. You can pass the context in an array of arrays. The first item in the array is the callback, the second item is the context.
+
+```javascript
+e.subscribe( 'hear:bark', [[this.stop, this]] );
+```
+
+Or pass the context and callback as a object.
+
+```javascript
+e.subscribe( 'hear:bark', [{
+    callback: this.stop, 
+    context: this
+}]);
+```
 
 ## Example
 
